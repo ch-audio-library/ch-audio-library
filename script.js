@@ -1,58 +1,72 @@
+// Структура аудиоальбомов
 const audioGroups = {
   "Пётр Ильич Чайковский – Детский альбом": [
-    "tchaikovsky/Раннее-утро.mp3",
-    "tchaikovsky/track2.mp3"
+    { file: "tchaikovsky/track1.mp3", title: "Утро" },
+    { file: "tchaikovsky/track2.mp3", title: "Игра" }
   ],
   "Игорь Алексеевич Парфёнов – Детский альбом": [
-    "parfenov/track1.mp3"
+    { file: "parfenov/track1.mp3", title: "Колыбельная" }
   ],
   "Эми Бич – Детский альбом": [
-    "beach/track1.mp3"
+    { file: "beach/track1.mp3", title: "Вальс" }
   ]
 };
 
-const trackList = document.getElementById("trackList");
-const currentUrl = window.location.href.replace(/\/$/, "");
+// Поиск читаемого названия трека по имени файла
+function findTitleByFilename(filename) {
+  for (const tracks of Object.values(audioGroups)) {
+    for (const track of tracks) {
+      if (track.file === filename) {
+        return track.title;
+      }
+    }
+  }
+  return filename;
+}
 
 const urlParams = new URLSearchParams(window.location.search);
 const playFile = urlParams.get("play");
+const currentUrl = window.location.origin + window.location.pathname;
 
-// Переход по ссылке ?play=...
 if (playFile) {
+  // Режим воспроизведения по ссылке ?play=...
+  const title = findTitleByFilename(playFile);
   const audio = document.createElement("audio");
   audio.src = `audio/${playFile}`;
-  audio.autoplay = true;
   audio.controls = true;
-  document.body.innerHTML = `<h2>Воспроизведение: ${decodeURIComponent(playFile)}</h2>`;
+  audio.autoplay = true;
+
+  document.body.innerHTML = `<h2>Воспроизведение: ${title}</h2>`;
   document.body.appendChild(audio);
 } else {
-  // Вывод всех блоков и треков
-  for (const [groupTitle, files] of Object.entries(audioGroups)) {
+  // Режим отображения списка треков
+  const trackList = document.getElementById("trackList");
+
+  for (const [groupTitle, tracks] of Object.entries(audioGroups)) {
     const groupHeader = document.createElement("h2");
     groupHeader.textContent = groupTitle;
     trackList.appendChild(groupHeader);
 
-    files.forEach(filename => {
-      const nameOnly = filename.split("/").pop().replace(".mp3", "");
+    tracks.forEach(track => {
       const container = document.createElement("div");
       container.className = "track";
 
-      const title = document.createElement("h3");
-      title.textContent = nameOnly;
+      const titleEl = document.createElement("h3");
+      titleEl.textContent = track.title;
 
       const audio = document.createElement("audio");
       audio.controls = true;
-      audio.src = `audio/${filename}`;
+      audio.src = `audio/${track.file}`;
 
       const qrDiv = document.createElement("div");
       qrDiv.className = "qrcode";
 
-      const fullPath = `${currentUrl}?play=${encodeURIComponent(filename)}`;
+      const fullPath = `${currentUrl}?play=${encodeURIComponent(track.file)}`;
       QRCode.toCanvas(qrDiv, fullPath, { width: 128 }, err => {
         if (err) console.error(err);
       });
 
-      container.appendChild(title);
+      container.appendChild(titleEl);
       container.appendChild(audio);
       container.appendChild(qrDiv);
       trackList.appendChild(container);
