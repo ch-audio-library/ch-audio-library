@@ -14,14 +14,18 @@ class MusicPlayer {
     this.artistElement = document.getElementById('artist');
     this.trackNameElement = document.getElementById('track-name');
     this.progressBar = document.getElementById('progress-bar');
+    this.progressContainer = document.getElementById('progress-container');
     this.controlPanel = document.getElementById('control-panel');
     this.infoBar = document.getElementById('info');
     this.homePage = document.getElementById('home-page');
 
     // Привязка контекста
     this.play = this.play.bind(this);
+    this.pause = this.pause.bind(this);
     this.updateProgress = this.updateProgress.bind(this);
     this.togglePlayPause = this.togglePlayPause.bind(this);
+    this.handleProgressClick = this.handleProgressClick.bind(this);
+    this.loadTrack = this.loadTrack.bind(this);
 
     // Инициализация
     this.init();
@@ -35,13 +39,13 @@ class MusicPlayer {
     if (trackToPlay) {
       this.loadTrack(trackToPlay);
     } else {
-      // Если нет трека для воспроизведения, показываем главную страницу
       this.showHomePage();
     }
 
     // Настройка аудио
     this.audio.addEventListener('timeupdate', this.updateProgress);
     this.playBtn.addEventListener('click', this.togglePlayPause);
+    this.progressContainer.addEventListener('click', this.handleProgressClick);
   }
 
   loadTrack(trackPath) {
@@ -62,6 +66,7 @@ class MusicPlayer {
     this.audio.play().then(() => {
       this.isPlaying = true;
       this.updatePlayButton();
+      this.toggleActiveState();
     }).catch(error => {
       console.error('Автовоспроизведение не сработало:', error);
     });
@@ -115,21 +120,34 @@ class MusicPlayer {
     // Здесь можно добавить смену иконки play/pause
   }
 
+  handleProgressClick(e) {
+    if (!this.audio.duration) return;
+    
+    const width = this.progressContainer.clientWidth;
+    const clickX = e.offsetX;
+    const percentage = (clickX / width) * 100;
+    this.progressBar.style.width = `${percentage}%`;
+    this.audio.currentTime = (this.audio.duration / 100) * percentage;
+  }
+
   updateProgress() {
-    const progress = (this.audio.currentTime / this.audio.duration) * 100;
-    this.progressBar.style.width = `${progress}%`;
+    if (this.audio.duration) {
+      const progress = (this.audio.currentTime / this.audio.duration) * 100;
+      this.progressBar.style.width = `${progress}%`;
+    }
   }
 
   toggleActiveState() {
-    Array.from(this.controlPanel.classList).find(element => {
-      return element !== "active" ? this.controlPanel.classList.add('active') : this.controlPanel.classList.remove('active');
-    });
+    const hasActiveClass = this.controlPanel.classList.contains('active');
     
-    Array.from(this.infoBar.classList).find(element => {
-      return element !== "active" ? this.infoBar.classList.add('active') : this.infoBar.classList.remove('active');
-    });
+    if (this.isPlaying && !hasActiveClass) {
+      this.controlPanel.classList.add('active');
+      this.infoBar.classList.add('active');
+    } else if (!this.isPlaying && hasActiveClass) {
+      this.controlPanel.classList.remove('active');
+      this.infoBar.classList.remove('active');
+    }
   }
 }
 
-// Инициализация плеера
 const player = new MusicPlayer();

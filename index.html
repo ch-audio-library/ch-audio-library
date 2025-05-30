@@ -8,12 +8,11 @@
 </head>
 <body>
   <div id="app">
-    <!-- Плеер будет отображаться только когда есть трек для воспроизведения -->
     <div class="player" id="player" style="display: none;">
       <div id="info" class="info">
         <span class="artist" id="artist">Исполнитель</span>
         <span class="name" id="track-name">Название трека</span>
-        <div class="progress-bar">
+        <div class="progress-bar" id="progress-container">
           <div class="bar" id="progress-bar"></div>
         </div>
       </div>
@@ -27,7 +26,6 @@
       </div>
     </div>
 
-    <!-- Контейнер для главной страницы -->
     <div id="home-page"></div>
   </div>
 
