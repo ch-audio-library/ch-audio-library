@@ -1,6 +1,6 @@
 const audioGroups = {
   "Пётр Ильич Чайковский – Детский альбом": [
-    "tchaikovsky/track1.mp3",
+    "tchaikovsky/Раннее-утро.mp3",
     "tchaikovsky/track2.mp3"
   ],
   "Игорь Алексеевич Парфёнов – Детский альбом": [
