@@ -1,0 +1,19 @@
+body {
+  font-family: sans-serif;
+  padding: 2rem;
+}
+
+.track {
+  margin-bottom: 2rem;
+  border-bottom: 1px solid #ccc;
+  padding-bottom: 1rem;
+}
+
+audio {
+  display: block;
+  margin-top: 0.5rem;
+}
+
+.qrcode {
+  margin-top: 0.5rem;
+}
