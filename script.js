@@ -26,6 +26,8 @@ class MusicPlayer {
     this.togglePlayPause = this.togglePlayPause.bind(this);
     this.handleProgressClick = this.handleProgressClick.bind(this);
     this.loadTrack = this.loadTrack.bind(this);
+    this.skipForward = this.skipForward.bind(this);
+    this.skipBackward = this.skipBackward.bind(this);
 
     // Инициализация
     this.init();
@@ -46,6 +48,18 @@ class MusicPlayer {
     this.audio.addEventListener('timeupdate', this.updateProgress);
     this.playBtn.addEventListener('click', this.togglePlayPause);
     this.progressContainer.addEventListener('click', this.handleProgressClick);
+    this.nextBtn.addEventListener('click', this.skipForward);
+    this.prevBtn.addEventListener('click', this.skipBackward);
+  }
+
+  skipForward() {
+    this.audio.currentTime = Math.min(this.audio.currentTime + 15, this.audio.duration);
+    this.updateProgress();
+  }
+
+  skipBackward() {
+    this.audio.currentTime = Math.max(this.audio.currentTime - 15, 0);
+    this.updateProgress();
   }
 
   loadTrack(trackPath) {
