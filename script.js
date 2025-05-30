@@ -1,14 +1,8 @@
 // Структура аудиоальбомов
 const audioGroups = {
-  "Пётр Ильич Чайковский – Детский альбом": [
-    { file: "tchaikovsky/track1.mp3", title: "Утро" },
-    { file: "tchaikovsky/track2.mp3", title: "Игра" }
-  ],
-  "Игорь Алексеевич Парфёнов – Детский альбом": [
-    { file: "parfenov/track1.mp3", title: "Колыбельная" }
-  ],
-  "Эми Бич – Детский альбом": [
-    { file: "beach/track1.mp3", title: "Вальс" }
+  "Нотная тетрадь Анны Магдалены Бах": [
+    { file: "magdalena/track1.mp3", title: "Менуэт соль-мажор" },
+    { file: "magdalena/track2.mp3", title: "Игра" }
   ]
 };
 
